@@ -1,4 +1,9 @@
 function __ssh_agent_is_started -d "check if ssh agent is already started"
+	# Do not clobber a forwaraded SSH agent socket.
+	if begin; test -n "$SSH_AUTH_SOCK"; and test -e "$SSH_AUTH_SOCK"; end
+		return 0
+	end
+
 	if begin; test -f $SSH_ENV; and test -z "$SSH_AGENT_PID"; end
 		source $SSH_ENV > /dev/null
 	end
